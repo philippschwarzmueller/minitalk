@@ -6,16 +6,14 @@
 /*   By: pschwarz <pschwarz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:15:53 by pschwarz          #+#    #+#             */
-/*   Updated: 2022/12/12 14:37:38 by pschwarz         ###   ########.fr       */
+/*   Updated: 2022/12/12 16:35:03 by pschwarz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <fcntl.h>
 #include "minitalk.h"
 
 int	main(int argc, char **argv)
 {
-	kill(atoi(argv[argc - 1]), 9);
+	kill(atoi(argv[argc - 1]), 30);
 	return (0);
 }
