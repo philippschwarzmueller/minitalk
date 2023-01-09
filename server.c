@@ -6,14 +6,14 @@
 /*   By: pschwarz <pschwarz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:16:03 by pschwarz          #+#    #+#             */
-/*   Updated: 2023/01/08 15:37:41 by pschwarz         ###   ########.fr       */
+/*   Updated: 2023/01/09 09:03:22 by pschwarz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 void	signal_handler(int sig);
-int		ft_bintoc(char *b);
+char	ft_bintoc(char *b);
 
 int	main(void)
 {
@@ -21,7 +21,7 @@ int	main(void)
 	signal(SIGUSR1, signal_handler);
 	signal(SIGUSR2, signal_handler);
 	while (1)
-		sleep(1);
+		pause();
 	return (0);
 }
 
@@ -39,13 +39,13 @@ void	signal_handler(int sig)
 		received_char = ft_strjoin(received_char, "0");
 	if (bit_count == 8)
 	{
-		ft_printf("%c\n", ft_bintoc(received_char));
+		ft_printf("%c", ft_bintoc(received_char));
 		received_char = "";
 		bit_count = 0;
 	}
 }
 
-int	ft_bintoc(char *b)
+char	ft_bintoc(char *b)
 {
 	char	res;
 	int		i;
@@ -54,17 +54,9 @@ int	ft_bintoc(char *b)
 	i = 0;
 	while (b[i] != '\0')
 	{
-		if (b[i] == '0')
-		{
-			ft_printf("%d\n", res);
-		}
-		else if (b[i] == '1')
-		{
+		if (b[i] == '1')
 			res = res ^ (1 << (7 - i));
-			ft_printf("%d\n", res);
-		}
 		i++;
 	}
-	ft_printf("--> ");
 	return (res);
 }
