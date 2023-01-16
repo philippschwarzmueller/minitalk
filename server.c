@@ -44,9 +44,9 @@ void	signal_handler(int sig)
 	{
 		c = ft_bintoc(received_char);
 		if (c == '\0')
-			ft_printf("\n");
+			write(1, "\n", 1);
 		else
-			ft_printf("%c", c);
+			write(1, &c, 1);
 		received_char = "";
 		c = 0;
 		bit_count = 0;
