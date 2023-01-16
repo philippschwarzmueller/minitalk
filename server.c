@@ -12,28 +12,32 @@
 
 #include "minitalk.h"
 
-void	signal_handler(int sig);
+void	signal_handler(int sig, siginfo_t *siginfo, void *ctx);
 char	ft_bintoc(char *b);
 
 int	main(void)
 {
-	ft_printf("%d\n", getpid());
-	signal(SIGUSR1, signal_handler);
-	signal(SIGUSR2, signal_handler);
+	struct sigaction	sigact;
+
+	sigact.sa_sigaction = &signal_handler;
+	sigact.sa_flags = SA_SIGINFO;
+	ft_printf("PID: %d\n", getpid());
+	sigaction(SIGUSR1, &sigact, NULL);
+	sigaction(SIGUSR2, &sigact, NULL);
 	while (1)
 		pause();
 	return (0);
 }
 
 // add function that if null byte is received a response is sent to client
-// "never use printf in a signal handler
-void	signal_handler(int sig)
+void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 {
 	static char	*received_char;
 	static int	bit_count;
 	char		c;
 
 	bit_count++;
+	(void) ctx;
 	if (!received_char)
 		received_char = "";
 	if (sig == 30)
@@ -44,7 +48,10 @@ void	signal_handler(int sig)
 	{
 		c = ft_bintoc(received_char);
 		if (c == '\0')
+		{
 			write(1, "\n", 1);
+			ft_printf("%d\n", siginfo->si_pid);
+		}
 		else
 			write(1, &c, 1);
 		received_char = "";
