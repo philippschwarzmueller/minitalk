@@ -6,3 +6,4 @@ a.out.dSYM/
 .DS_Store
 server
 client
+.ccls-cache/
