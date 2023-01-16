@@ -18,6 +18,7 @@ int	main(int argc, char **argv)
 {
 	char	*binarystr;
 	int		i;
+	int		k;
 
 	if (argc != 3)
 		return (ft_printf("Error: Args should be PID and string\n"), 0);
@@ -37,9 +38,18 @@ int	main(int argc, char **argv)
 		i++;
 		usleep(100);
 	}
+	k = 8;
+	while (k > 0)
+	{
+		kill(ft_atoi(argv[argc - 2]), SIGUSR2);
+		k--;
+		usleep(100);
+	}
 	free(binarystr);
 	return (0);
 }
+
+// add function that sends 8 zero bits to signal that string is sent successful
 
 static char	*ft_strtorevb(char *s)
 {

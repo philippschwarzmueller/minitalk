@@ -25,10 +25,13 @@ int	main(void)
 	return (0);
 }
 
+// add function that if null byte is received a response is sent to client
+// "never use printf in a signal handler
 void	signal_handler(int sig)
 {
 	static char	*received_char;
 	static int	bit_count;
+	char		c;
 
 	bit_count++;
 	if (!received_char)
@@ -39,8 +42,13 @@ void	signal_handler(int sig)
 		received_char = ft_strjoin(received_char, "0");
 	if (bit_count == 8)
 	{
-		ft_printf("%c", ft_bintoc(received_char));
+		c = ft_bintoc(received_char);
+		if (c == '\0')
+			ft_printf("\n");
+		else
+			ft_printf("%c", c);
 		received_char = "";
+		c = 0;
 		bit_count = 0;
 	}
 }
