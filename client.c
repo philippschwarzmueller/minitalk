@@ -26,6 +26,8 @@ int	main(int argc, char **argv)
 		return (ft_printf("Error: PID needs to be a number\n"), 0);
 	signal(SIGUSR1, signal_handler);
 	binarystr = ft_strtorevb(argv[argc - 1]);
+	if (!binarystr)
+		exit(EXIT_FAILURE);
 	send_binary_str(binarystr, ft_atoi(argv[argc - 2]));
 	free(binarystr);
 	while (1)
