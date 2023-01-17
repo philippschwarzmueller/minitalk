@@ -12,8 +12,8 @@
 
 #include "minitalk.h"
 
-void	signal_handler(int sig, siginfo_t *siginfo, void *ctx);
-char	ft_bintoc(char *b);
+static void	signal_handler(int sig, siginfo_t *siginfo, void *ctx);
+static char	ft_bintoc(char *b);
 
 int	main(void)
 {
@@ -29,14 +29,14 @@ int	main(void)
 	return (0);
 }
 
-void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
+static void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 {
 	static char	*received_char;
 	static int	bit_count;
 	char		c;
 
-	bit_count++;
 	(void) ctx;
+	bit_count++;
 	if (!received_char)
 		received_char = "";
 	if (sig == 30)
@@ -58,7 +58,7 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 	}
 }
 
-char	ft_bintoc(char *b)
+static char	ft_bintoc(char *b)
 {
 	char	res;
 	int		i;

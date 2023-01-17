@@ -46,7 +46,7 @@ static void	send_binary_str(char *str, int pid)
 		else if (str[i] == '0')
 			kill(pid, SIGUSR2);
 		else
-			ft_printf("error: failed to send string\n");
+			ft_printf("Error: failed to send string\n");
 		i++;
 		usleep(100);
 	}
