@@ -14,7 +14,7 @@
 
 static char	*ft_strtorevb(char *s);
 static void	send_binary_str(char *str, int pid);
-void		signal_handler(int sig);
+static void	signal_handler(int sig);
 
 int	main(int argc, char **argv)
 {
@@ -67,7 +67,7 @@ static char	*ft_strtorevb(char *s)
 	int		k;
 
 	len = ft_strlen(s);
-	res = ft_calloc(len * 8 + 1, sizeof(char));
+	res = ft_calloc((len * 8) + 1, sizeof(char));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -88,7 +88,7 @@ static char	*ft_strtorevb(char *s)
 	return (res);
 }
 
-void	signal_handler(int sig)
+static void	signal_handler(int sig)
 {
 	if (sig == SIGUSR1)
 	{
