@@ -29,7 +29,6 @@ int	main(void)
 	return (0);
 }
 
-// add function that if null byte is received a response is sent to client
 void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 {
 	static char	*received_char;
@@ -50,12 +49,11 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 		if (c == '\0')
 		{
 			write(1, "\n", 1);
-			ft_printf("%d\n", siginfo->si_pid);
+			kill(siginfo->si_pid, SIGUSR1);
 		}
 		else
 			write(1, &c, 1);
 		received_char = "";
-		c = 0;
 		bit_count = 0;
 	}
 }

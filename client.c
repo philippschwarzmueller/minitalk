@@ -13,43 +13,51 @@
 #include "minitalk.h"
 
 static char	*ft_strtorevb(char *s);
+static void	send_binary_str(char *str, int pid);
+void		signal_handler(int sig);
 
 int	main(int argc, char **argv)
 {
 	char	*binarystr;
-	int		i;
-	int		k;
 
 	if (argc != 3)
 		return (ft_printf("Error: Args should be PID and string\n"), 0);
 	if (!ft_atoi(argv[argc - 2]))
 		return (ft_printf("Error: PID needs to be a number\n"), 0);
+	signal(SIGUSR1, signal_handler);
 	binarystr = ft_strtorevb(argv[argc - 1]);
-	i = 0;
-	ft_printf("%s EOL\n", binarystr);
-	while (binarystr[i] != '\0')
-	{
-		if (binarystr[i] == '1')
-			kill(ft_atoi(argv[argc - 2]), SIGUSR1);
-		else if (binarystr[i] == '0')
-			kill(ft_atoi(argv[argc - 2]), SIGUSR2);
-		else
-			ft_printf("error sending signal");
-		i++;
-		usleep(100);
-	}
-	k = 8;
-	while (k > 0)
-	{
-		kill(ft_atoi(argv[argc - 2]), SIGUSR2);
-		k--;
-		usleep(100);
-	}
+	send_binary_str(binarystr, ft_atoi(argv[argc - 2]));
 	free(binarystr);
+	while (1)
+		pause();
 	return (0);
 }
 
-// add function that sends 8 zero bits to signal that string is sent successful
+static void	send_binary_str(char *str, int pid)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '1')
+			kill(pid, SIGUSR1);
+		else if (str[i] == '0')
+			kill(pid, SIGUSR2);
+		else
+			ft_printf("error: failed to send string\n");
+		i++;
+		usleep(100);
+	}
+	j = 8;
+	while (j > 0)
+	{
+		kill(pid, SIGUSR2);
+		j--;
+		usleep(100);
+	}
+}
 
 static char	*ft_strtorevb(char *s)
 {
@@ -78,4 +86,15 @@ static char	*ft_strtorevb(char *s)
 		i++;
 	}
 	return (res);
+}
+
+void	signal_handler(int sig)
+{
+	if (sig == SIGUSR1)
+	{
+		write(1, "Server received the string\n", 27);
+		exit(EXIT_SUCCESS);
+	}
+	else
+		exit(EXIT_FAILURE);
 }
