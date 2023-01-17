@@ -39,9 +39,9 @@ static void	signal_handler(int sig, siginfo_t *siginfo, void *ctx)
 	bit_count++;
 	if (!received_char)
 		received_char = "";
-	if (sig == 30)
+	if (sig == SIGUSR1)
 		received_char = ft_strjoin(received_char, "1");
-	else if (sig == 31)
+	else if (sig == SIGUSR2)
 		received_char = ft_strjoin(received_char, "0");
 	if (bit_count == 8)
 	{
