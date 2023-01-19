@@ -27,11 +27,11 @@ $(LIBFT):
 	cd libft && $(MAKE)
 
 clean:
-	rm $(CLIENTNAME) $(SERVERNAME)
+	rm $(OBJECTS_SERVER) $(OBJECTS_CLIENT)
 	cd libft && $(MAKE) clean
 
 fclean: clean
-	rm $(OBJECTS_SERVER) $(OBJECTS_CLIENT)
+	rm $(CLIENTNAME) $(SERVERNAME)
 	cd libft && $(MAKE) fclean
 
 re: fclean all

@@ -26,6 +26,8 @@ int	main(int argc, char **argv)
 		return (ft_printf("Error: PID needs to be a number\n"), 0);
 	signal(SIGUSR1, signal_handler);
 	binarystr = ft_strtorevb(argv[argc - 1]);
+	if (!binarystr)
+		exit(EXIT_FAILURE);
 	send_binary_str(binarystr, ft_atoi(argv[argc - 2]));
 	free(binarystr);
 	while (1)
@@ -33,30 +35,48 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
+static void	send_nullbyte(int pid)
+{
+	int	j;
+
+	j = 8;
+	while (j > 0)
+	{
+		if (kill(pid, SIGUSR2))
+		{
+			j--;
+			usleep(100);
+		}
+	}
+}
+
 static void	send_binary_str(char *str, int pid)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (str[i] != '\0')
 	{
 		if (str[i] == '1')
-			kill(pid, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1))
+			{
+				free(str);
+				exit(EXIT_FAILURE);
+			}
+		}
 		else if (str[i] == '0')
-			kill(pid, SIGUSR2);
-		else
-			ft_printf("Error: failed to send string\n");
+		{
+			if (kill(pid, SIGUSR2))
+			{
+				free(str);
+				exit(EXIT_FAILURE);
+			}
+		}
 		i++;
 		usleep(100);
 	}
-	j = 8;
-	while (j > 0)
-	{
-		kill(pid, SIGUSR2);
-		j--;
-		usleep(100);
-	}
+	send_nullbyte(pid);
 }
 
 static char	*ft_strtorevb(char *s)
